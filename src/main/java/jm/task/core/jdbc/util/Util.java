@@ -16,11 +16,16 @@ public class Util {
         try {
             Class.forName(DB_DRIVER);
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            connection.setAutoCommit(false);
+            connection.commit();
             System.out.println("good connection!");
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             System.err.println("no good connection!" + e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                System.err.println("no rollback connection!" + ex);
+            }
         }
         return connection;
     }
