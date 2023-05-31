@@ -1,31 +1,35 @@
 package jm.task.core.jdbc;
 
-import jm.task.core.jdbc.dao.UserDao;
-import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
-import jm.task.core.jdbc.util.Util;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.*;
-import java.util.function.Consumer;
+import jm.task.core.jdbc.service.UserService;
+import jm.task.core.jdbc.service.UserServiceImpl;
 
 public class Main {
 
+    private static final jm.task.core.jdbc.model.User user1 = new jm.task.core.jdbc.model.User("Name1", "LastName1", (byte) 30);
+    private static final jm.task.core.jdbc.model.User user2 = new jm.task.core.jdbc.model.User("Name2", "LastName2", (byte) 25);
+    private static final jm.task.core.jdbc.model.User user3 = new jm.task.core.jdbc.model.User("Name3", "LastName3", (byte) 31);
+    private static final jm.task.core.jdbc.model.User user4 = new jm.task.core.jdbc.model.User("Name4", "LastName4", (byte) 38);
+
     public static void main(String[] args) {
-        Util.getConnection();
-        UserDao userDao = new UserDaoJDBCImpl();
+        UserService userService = new UserServiceImpl();
+        userService.createUsersTable();
 
-        userDao.createUsersTable();
+        userService.saveUser(user1.getName(), user1.getLastName(), user1.getAge());
+        System.out.println("User c именем " + user1.getName() + " добавлен в базу данных");
 
-        userDao.saveUser("Name1", "LastName1", (byte) 20);
-        userDao.saveUser("Name2", "LastName2", (byte) 25);
-        userDao.saveUser("Name3", "LastName3", (byte) 31);
-        userDao.saveUser("Name4", "LastName4", (byte) 38);
+        userService.saveUser(user2.getName(), user2.getLastName(), user2.getAge());
+        System.out.println("User c именем " + user2.getName() + " добавлен в базу данных");
 
-        userDao.removeUserById(1);
-        userDao.getAllUsers();
-        userDao.cleanUsersTable();
-        userDao.dropUsersTable();
+        userService.saveUser(user3.getName(), user3.getLastName(), user3.getAge());
+        System.out.println("User c именем " + user3.getName() + " добавлен в базу данных");
+
+        userService.saveUser(user4.getName(), user4.getLastName(), user4.getAge());
+        System.out.println("User c именем " + user4.getName() + " добавлен в базу данных");
+
+        userService.removeUserById(1);
+        userService.getAllUsers();
+        System.out.println(userService.getAllUsers());
+        userService.cleanUsersTable();
+        userService.dropUsersTable();
     }
 }
